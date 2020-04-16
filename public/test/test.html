@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+
+<link href="examples.css" rel="stylesheet" />
+<style>
+
+/*
+PDFObject appends the classname "pdfobject-container" to the target element.
+This enables you to style the element differently depending on whether the embed was successful.
+*/
+.pdfobject-container {
+	width: 100%;
+	max-width: 600px;
+	height: 600px;
+	margin: 2em 0;
+}
+
+/* PDFObject automatically assigns the class name "pdfobject" to the <embed> element */
+.pdfobject { border: solid 1px #666; }
+
+</style>
+
+</head>
+
+<body>
+<h1>PDFObject Example: Embed two PDFs on one HTML page</h1>
+<p>Multiple PDFs can be embedded inside a single HTML document.</p>
+
+<div id="pdf1"></div>
+
+<div id="pdf2"></div>
+
+<div class="pdfobject-com"><a href="http://pdfobject.com">PDFObject.com</a></div>
+
+<script src="pdfobject.min.js"></script>
+<script>
+
+var options = {
+	page: 2,
+	pdfOpenParams: {
+		navpanes: 1,
+		view: "FitH",
+		pagemode: "thumbs"
+	}
+};
+
+PDFObject.embed("pnm.pdf", "#pdf1", options);
+
+</script>
+
+<!-- analytics, unrelated to any example code presented on this page -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1394306-6', 'auto');
+ga('send', 'pageview');
+</script>
+</body>
+</html>

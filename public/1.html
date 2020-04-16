@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Snap a Picture of Preview</title>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='initial-scale=1.0'>
+	<script type='text/javascript' src='/jquery/jquery-3.2.1.min.js'></script>
+	<script src='org/html2canvas/html2canvas.js'></script>
+	<style type='text/css'>
+		body {
+			overflow-x: hidden;
+		}
+
+		iframe {
+			width: 100%;
+			height: 0px;
+			border-width: 0px;
+		}
+
+		#codes textarea {
+			width: 100%;
+			height: 200px;
+			border-width: 0px;
+			border-bottom: solid 1px black;
+		}
+
+		#thumbnails img {
+			width: 100%;
+		}
+
+		.image-container {
+			display: inline-block;
+			background-color: #eee;
+			border: solid 1px gray;
+			border-radius: 5px;
+			box-shadow: 0 0 15px 5px lightgray;
+			width: 400px;
+			height: 600px;
+			overflow-y: hidden;
+			margin-right: 20px;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div id="codes" style="display: none;">
+		<!-- <textarea id='code_idx'></textarea> -->
+	</div>
+
+	<div id="iframes">
+		<!-- <iframe id="preview_idx"></iframe> -->
+	</div>
+
+	<div id="thumbnails">
+		<!-- <div class="image-container">
+			<img src="{src}" />
+		</div> -->
+	</div>
+
+	<script>
+		var idx = 0;
+		// Ҫ��ͼ��ҳ���ַ
+		var urlList = [
+			'generate/login'
+		];
+
+		// ��ʼ������������ҳ��Դ�룬ע��js����Ⱦ����iframe��ע���js�����ã���ͼ
+		$.each(urlList, function(idx){
+			$('#iframes').append('<iframe id="preview_' + idx + '"></iframe>');
+			$('#codes').append('<textarea id="code_' + idx + '"></textarea>');
+			(function(_idx){
+				$.ajax({
+					url: urlList[_idx],
+					success: function(data) {
+						$('#code_' + _idx).val(data);
+
+						var content = 
+							'<script src="/jquery/jquery-3.2.1.min.js"><\/script>';
+						addJSToHead('code_' + _idx, content);
+						
+						var content = 
+							'<script src="org/html2canvas/html2canvas.js"><\/script>';
+						addJSToHead('code_' + _idx, content);
+						
+						var content = 
+							'<script type="text/javascript">\n' +
+							'	console.log("Code is Injected.");\n' +
+							'	$(document).ready(function() {\n' +
+							'		setTimeout(function(){\n' +
+							'			html2canvas($("body"), {\n' +
+							'				onrendered: function(canvas) {\n' +
+							'					console.log("Html2canvas onrendered.");\n' +
+							'					var myImage = canvas.toDataURL("image/png");\n' +
+							'					$(parent.document).find("#thumbnails").append(\'<div class="image-container"><img src=\' + myImage + \' alt="" /></div>\');\n' +
+							'				}\n' +
+							'			});\n' +
+							// ����ȴ�1����Ϊ�˵ȴ�canvas��ͼ��Ķ�̬Ч��ִ������ٽ�ͼ�����ҳ��û�ж���Ч������������Ϊ0
+							'		}, 1000);\n' +
+							'	});\n' +
+							'<\/script>';
+						addJSToBody('code_' + _idx, content);
+
+						setTimeout(function(){
+							var previewFrame = $('#preview_' + _idx)[0];
+							var preview = previewFrame.contentDocument || previewFrame.contentWindow.document;
+
+							preview.open();
+							preview.write($('#code_' + _idx).val());
+							preview.close();
+						}, 0);
+					}
+				});
+			})(idx);
+		});
+
+		// ע��js��head�ķ���
+		function addJSToHead(id, content) {
+			var pageContent = $('#' + id).val();
+
+			var searchText = pageContent.search('<head>');
+			if(searchText > 0) {
+				content = '<head>' + '\n' + content;
+				var updatedPageContent = pageContent.replace('<head>', content);
+				$('#' + id).val(updatedPageContent);
+			}
+			else {
+				alert('WARNING! The &lt;head&gt tag seems to be missing in your HTML. Although your code may still work, we highly recommened that you have a valid HTML syntax. Please refer to the new document of correct formatted');
+				content = content + pageContent;
+				return false;
+			}
+		}
+
+		// ע��js��body�ķ���
+		function addJSToBody(id, content) {
+			var pageContent = $('#' + id).val();
+
+			var searchText = pageContent.search('<body>');
+			if(searchText > 0) {
+				content = '<body>' + '\n' + content;
+				var updatedPageContent = pageContent.replace('<body>', content);
+				$('#' + id).val(updatedPageContent);
+			}
+			else {
+				alert('WARNING! The <body> tag seems to be missing in your HTML. Although your code may still work, we highly recommened that you have a valid HTML syntax. Please refer to the new document of correct formatted');
+				content = content + pageContent;
+				return false;
+			}
+		}
+	</script>
+</body>
+</html>

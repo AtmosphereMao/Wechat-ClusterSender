@@ -1,0 +1,14 @@
+.change_one{
+     border: 1px solid #b3b3b3;
+     padding: 5px 10px 5px 10px;
+     float: left;
+     margin-right: 5px;
+ }
+#page_action{
+    margin-bottom: 10px;
+}
+.search_box{
+    float: left;
+    width: 100%;
+    margin:5px 10px 30px 10px;
+}

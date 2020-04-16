@@ -1,0 +1,49 @@
+#js_warning,#qrcode{
+    position: absolute;
+    left: 50%;
+    top: 5em;
+    margin-left: -160px;
+    border: 5px solid #eee;
+    background-color: #fff;
+    border-radius:10px;
+}
+
+#qrcode{
+    width: 320px;
+    height: 300px;
+    text-align: center;
+    display: none;
+}
+#qrcode img{
+    width:70%;
+    height: auto;
+}
+#js_warning{
+    width: 320px;
+    height: 100px;
+}
+.js_warning_time{
+    text-align: center;
+    margin: 30px 10px 10px 10px;
+    height: auto;
+}
+#js_warning img{
+    width:20px;
+    height: 20px;
+    float: right;
+}
+#wxinfo_friends{
+
+}
+.WarningMsg{
+    color: red;
+    font-weight: bold;
+}
+#wxinfo_table_next,#wxinfo_table_submit{
+    float: right;
+    margin-bottom: 10px;
+}
+#wxinfo_table_back{
+    float: left;
+    margin-bottom: 10px;
+}
